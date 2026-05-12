@@ -1,34 +1,31 @@
 import { useState, useEffect } from "react";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
-import { View, ActivityIndicator } from "react-native";
-import Home from "./src/screens/Home";
 
 WebBrowser.maybeCompleteAuthSession();
 
-export function App() {
-  const [user, setUser] = useState(null);
+export function useGoogleAuth() {
+  const [userInfo, setUserInfo] = useState(null);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    clientId: "SEU_WEB_CLIENT_ID.apps.googleusercontent.com",
+    clientId: "590651125899-be41cpqrcle02ld2f0k8u8uvfek48ip6.apps.googleusercontent.com.apps.googleusercontent.com",
+    // androidClientId: 'SEU_ANDROID_CLIENT_ID',
+    // iosClientId: 'SEU_IOS_CLIENT_ID',
   });
 
   useEffect(() => {
     if (response?.type === "success") {
-      fetchUser(response.authentication.accessToken);
+      fetchUserInfo(response.authentication.accessToken);
     }
   }, [response]);
 
-  async function fetchUser(token) {
+  async function fetchUserInfo(token) {
     const res = await fetch("https://www.googleapis.com/userinfo/v2/me", {
       headers: { Authorization: `Bearer ${token}` },
     });
-    setUser(await res.json());
+    const data = await res.json();
+    setUserInfo(data);
   }
 
-  function signOut() {
-    setUser(null);
-  }
-
-  return <View>{user ? <Home /> : <ActivityIndicator size="large" color="#00ff00" />}</View>;
+  return { userInfo, request, promptAsync };
 }
