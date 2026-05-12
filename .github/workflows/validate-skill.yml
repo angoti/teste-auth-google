@@ -1,0 +1,21 @@
+name: Validate SKILL.md
+
+on:
+  pull_request:
+    paths:
+      - "SKILL.md"
+      - ".github/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+      - name: Install deps (no-op if none)
+        run: npm ci || true
+      - name: Run skill validation
+        run: npm run validate-skill
