@@ -60,6 +60,7 @@ Critérios de qualidade / checks de aceitação:
 - `name`, `description`, `triggers`, `applyTo`, `workflow` e `examples` presentes.
 - Checklist de PR/merge sugerido (reviews, CI green).
 - Para geração de código RN: NUNCA usar `import React from 'react';` em exemplos.
+- Usar main como branch principal, evitar `master` ou outras convenções.
 
 Exemplos de uso / prompts para testar o skill:
 

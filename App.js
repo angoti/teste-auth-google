@@ -1,34 +1,15 @@
-import { useState, useEffect } from "react";
-import * as WebBrowser from "expo-web-browser";
-import * as Google from "expo-auth-session/providers/google";
-import { View, ActivityIndicator } from "react-native";
-import Home from "./src/screens/Home";
+import { StatusBar } from "expo-status-bar";
+import * as AuthSession from "expo-auth-session";
+import HomeScreen from "./src/screens/HomeScreen";
 
-WebBrowser.maybeCompleteAuthSession();
+// ↓ remova após descobrir a URI
+console.log("URI de redirecionamento:", AuthSession.makeRedirectUri({ useProxy: true }));
 
-export function App() {
-  const [user, setUser] = useState(null);
-
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    clientId: "SEU_WEB_CLIENT_ID.apps.googleusercontent.com",
-  });
-
-  useEffect(() => {
-    if (response?.type === "success") {
-      fetchUser(response.authentication.accessToken);
-    }
-  }, [response]);
-
-  async function fetchUser(token) {
-    const res = await fetch("https://www.googleapis.com/userinfo/v2/me", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setUser(await res.json());
-  }
-
-  function signOut() {
-    setUser(null);
-  }
-
-  return <View>{user ? <Home /> : <ActivityIndicator size="large" color="#00ff00" />}</View>;
+export default function App() {
+  return (
+    <>
+      <StatusBar style="dark" />
+      <HomeScreen />
+    </>
+  );
 }
